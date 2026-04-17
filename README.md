@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/ForPosts(Yellow).png" alt="Trade360Lab Analyzer BTC logo" width="180">
+  <img src="public/ForPosts(Yellow).png" alt="Trade360Lab Analyzer BTC logo" width="500">
   <h1>BTC Daily Forecast Bot</h1>
   <p><strong>BTCUSDT • XGBoost • Daily/Hourly forecast runtime</strong></p>
   <p>Аккуратный runtime для загрузки свечей Binance, расчёта вероятностного прогноза по BTC и публикации отчёта в stdout или Telegram.</p>
