@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="public/ForPosts(Yellow).png" alt="Trade360Lab Analyzer BTC logo" width="180">
   <h1>BTC Daily Forecast Bot</h1>
   <p><strong>BTCUSDT • XGBoost • Daily/Hourly forecast runtime</strong></p>
   <p>Аккуратный runtime для загрузки свечей Binance, расчёта вероятностного прогноза по BTC и публикации отчёта в stdout или Telegram.</p>
@@ -10,7 +11,7 @@
   </p>
 </div>
 
-## What the bot does
+## Что делает бот
 
 - Загружает OHLCV-свечи Binance через REST `klines`.
 - Валидирует структуру данных и шаг по времени.
@@ -22,21 +23,21 @@
 - Опционально отправляет этот же отчёт в Telegram.
 - Сохраняет историю запусков в `logs/forecast_history.jsonl`.
 
-## Architecture / Flow
+## Архитектура / Поток данных
 
 ```mermaid
 flowchart TD
-    A[Binance REST klines] --> B[Data validation]
-    B --> C[Feature engineering]
-    C --> D[Load artifacts/model.pkl]
-    D --> E[Predict probabilities]
-    E --> F[Decision layer]
-    F --> G[Console report]
-    F --> H[Telegram report]
-    F --> I[logs/forecast_history.jsonl]
+    A["Binance REST klines"] --> B["Проверка данных"]
+    B --> C["Подготовка признаков"]
+    C --> D["Загрузка artifacts/model.pkl"]
+    D --> E["Расчёт вероятностей"]
+    E --> F["Decision layer"]
+    F --> G["Отчёт в консоль"]
+    F --> H["Отчёт в Telegram"]
+    F --> I["История в forecast_history.jsonl"]
 ```
 
-## Runtime flow
+## Поток выполнения
 
 1. `run_daily_bot.py` запускает runtime и собирает настройки из environment variables и JSON-артефактов.
 2. `app.binance_loader` загружает свежие свечи Binance и проверяет целостность OHLCV-данных.
@@ -44,7 +45,7 @@ flowchart TD
 4. `app.reporter` форматирует человекочитаемый отчёт и при необходимости отправляет Telegram-сообщение.
 5. `app.runtime` дописывает результат в `logs/forecast_history.jsonl`.
 
-## Project structure
+## Структура проекта
 
 ```text
 .
@@ -71,7 +72,7 @@ flowchart TD
 
 `run_daily_boy.py` оставлен только как compatibility wrapper. Основной entrypoint: `run_daily_bot.py`.
 
-## Required artifacts
+## Обязательные артефакты
 
 В `artifacts/` runtime ожидает такие файлы:
 
@@ -83,7 +84,7 @@ flowchart TD
 
 Важно: в репозитории сейчас лежат JSON-метаданные и legacy `model.json`, но сам runtime работает в fail-fast режиме и требует валидный `model.pkl`.
 
-## Environment variables
+## Переменные окружения
 
 Поддерживаются такие переменные:
 
@@ -125,7 +126,7 @@ TZ=UTC
 USE_CLOSED_CANDLE_ONLY=true
 ```
 
-## Local run
+## Локальный запуск
 
 1. Создать виртуальное окружение и установить зависимости:
 
@@ -152,7 +153,7 @@ python run_daily_bot.py
 
 Если Telegram credentials не заданы или `TELEGRAM_ENABLED=false`, бот не падает и просто пропускает отправку.
 
-## Docker run
+## Запуск через Docker
 
 Сборка образа:
 
@@ -166,14 +167,14 @@ docker build -t btc-daily-bot .
 docker run --rm --env-file .env -v "$(pwd)/artifacts:/app/artifacts:ro" -v "$(pwd)/logs:/app/logs" btc-daily-bot
 ```
 
-## Docker Compose
+## Запуск через Docker Compose
 
 ```bash
 cp .env.example .env
 docker compose up --build bot
 ```
 
-## Example output
+## Пример вывода
 
 ```text
 2026-04-17 08:00:00,000 INFO __main__ Starting BTC analyzer: symbol=BTCUSDT timeframe=1h lookback=500 dry_run=False
@@ -202,13 +203,13 @@ Market context:
 ============================================================
 ```
 
-## Telegram behavior / optional notifications
+## Поведение Telegram / опциональные уведомления
 
 - Оставьте `TELEGRAM_ENABLED=false`, чтобы бот работал только через stdout и всё равно писал историю в `logs/forecast_history.jsonl`.
 - Установите `TELEGRAM_ENABLED=true` вместе с `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`, чтобы включить отправку в Telegram.
 - Если Telegram включён, но credentials не заданы, runtime пропустит отправку и оставит warning в логах вместо падения.
 
-## Updating model artifacts
+## Обновление модельных артефактов
 
 1. Экспортировать новую обученную модель в `artifacts/model.pkl`.
 2. Обновить `artifacts/feature_columns.json`, если поменялся feature set.
@@ -218,7 +219,7 @@ Market context:
 
 После этого можно перезапустить бота без изменения application code.
 
-## CI
+## CI-пайплайн
 
 GitHub Actions запускается на каждом `push` в `main` и на `pull_request` в `main`.
 
