@@ -7,7 +7,7 @@
 
   <p>
     <img src="https://img.shields.io/badge/Python-3.11-blue.svg" alt="Python 3.11">
-    <img src="https://github.com/Trade360Lab/Trade360Lab-Analyzer-BTC/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status">
+    
   </p>
 </div>
 
@@ -27,14 +27,14 @@
 
 ```mermaid
 flowchart TD
-    A["Binance REST klines"] --> B["Проверка данных"]
-    B --> C["Подготовка признаков"]
-    C --> D["Загрузка artifacts/model.pkl"]
-    D --> E["Расчёт вероятностей"]
-    E --> F["Decision layer"]
-    F --> G["Отчёт в консоль"]
-    F --> H["Отчёт в Telegram"]
-    F --> I["История в forecast_history.jsonl"]
+    binance["Binance REST klines"] --> validate["Валидация данных"]
+    validate --> features["Подготовка признаков"]
+    features --> model["Загрузка artifacts/model.pkl"]
+    model --> predict["Расчёт вероятностей"]
+    predict --> decision["Decision layer"]
+    decision --> console["Отчёт в консоль"]
+    decision --> telegram["Отчёт в Telegram"]
+    decision --> history["История в forecast_history.jsonl"]
 ```
 
 ## Поток выполнения
